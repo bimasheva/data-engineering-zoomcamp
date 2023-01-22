@@ -7,6 +7,9 @@ docker run -it \
   -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data \
   -p 5432:5432 \
   postgres:13
+  
+### Access to the pgcli 
+# pgcli -h localhost -p 5432 -u root -d ny_taxi
 ```
 
 Question 1: 
