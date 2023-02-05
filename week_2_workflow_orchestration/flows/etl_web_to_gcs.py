@@ -5,7 +5,9 @@ from prefect import flow, task
 from prefect_gcp.cloud_storage import GcsBucket
 from prefect.tasks import task_input_hash
 from datetime import timedelta
+import os
 
+BASE_DIR = os.path.dirname(__file__)
 
 @task(retries=3)
 def fetch(dataset_url: str) -> pd.DataFrame:
@@ -51,14 +53,18 @@ def write_local(df: pd.DataFrame, color: str, dataset_file: str) -> Path:
     :param dataset_file:
     :return:
     """
-    path = Path(f"data/{color}/{dataset_file}.parquet")
+
+    # file_path = os.path.join(BASE_DIR, csv_name)
+    # path = Path(f"data/{color}/{dataset_file}.parquet")
+    path = Path(f"{dataset_file}.parquet")
+    to_path = Path(f"data/{color}/{dataset_file}.parquet")
     df.to_parquet(path, compression='gzip')
 
-    return path
+    return (path,to_path)
 
 
 @task(log_prints=True, retries=2)
-def write_to_gcs(path: Path) -> None:
+def write_to_gcs(path: Path, to_path:Path) -> None:
     """
     Uploading parquet file to GCS
     :param path:
@@ -68,7 +74,7 @@ def write_to_gcs(path: Path) -> None:
     gcp_cloud_storage_bucket_block = GcsBucket.load("zoom-gcs")
     gcp_cloud_storage_bucket_block.upload_from_path(
         from_path=path,
-        to_path=path
+        to_path=to_path
     )
 
 
@@ -84,8 +90,8 @@ def etl_web_to_gcs(year: int, month: int, color: str) -> None:
 
     df = fetch(dataset_url)
     df_clean = clean(df, color)
-    file_path = write_local(df_clean, color, dataset_file)
-    write_to_gcs(file_path)
+    file_path, to_path = write_local(df_clean, color, dataset_file)
+    write_to_gcs(file_path, to_path)
 
 
 @flow()
