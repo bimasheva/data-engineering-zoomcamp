@@ -6,8 +6,8 @@ github_block = GitHub.load("zoom-git")
 
 github_deploy = Deployment.build_from_flow(
     flow=etl_parent_flow,
-    name='GitHub-flow',
-    parameters={"year":2020, "color":"green","months":[11]},
+    name='GitHub-flow:Q5',
+    parameters={"year":2019, "color":"yellow","months":[2,3]},
     storage=github_block,
     entrypoint="week_2_workflow_orchestration/flows/etl_web_to_gcs.py:etl_parent_flow"
 )
