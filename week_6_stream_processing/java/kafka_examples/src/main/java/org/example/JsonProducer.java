@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class JsonProducer {
     private Properties props = new Properties();
     public JsonProducer() {
-        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "pkc-lzoyy.europe-west6.gcp.confluent.cloud:9092");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Variables.SERVER_HOST);
         props.put("security.protocol", "SASL_SSL");
         props.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username='"+Secrets.KAFKA_CLUSTER_KEY+"' password='"+Secrets.KAFKA_CLUSTER_SECRET+"';");
         props.put("sasl.mechanism", "PLAIN");
