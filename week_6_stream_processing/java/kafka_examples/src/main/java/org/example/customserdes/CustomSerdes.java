@@ -9,10 +9,6 @@ import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.Serializer;
-import org.example.data.PickupLocation;
-import org.example.data.Ride;
-import org.example.data.VendorInfo;
-
 import java.util.HashMap;
 import java.util.Map;
 
